@@ -17,7 +17,7 @@ from model import explain_row, plain_english, score, train_model
 
 st.set_page_config(
     page_title="Fraud Detection Studio",
-    page_icon="🕵️",
+    page_icon=":material/policy:",
     layout="wide",
 )
 branding.inject()
@@ -52,30 +52,31 @@ feed: pd.DataFrame = st.session_state.feed
 # ---------------- sidebar ----------------
 
 with st.sidebar:
-    st.title("🕵️ Controls")
+    st.title("Controls")
 
     st.subheader("Live feed")
-    if st.button("▶ Stream 25 transactions", use_container_width=True):
+    if st.button("Stream 25 transactions", use_container_width=True):
         append_feed(st.session_state.sim.stream(25))
         st.rerun()
 
     st.subheader("Inject a fraud scenario")
     st.caption("Simulate an attack and watch the model catch it.")
     for key, label in SCENARIOS.items():
-        if st.button(f"⚠️ {label}", use_container_width=True):
+        if st.button(label, use_container_width=True):
             append_feed(st.session_state.sim.inject(key))
             st.rerun()
 
     threshold = st.slider("Alert threshold", 0.05, 0.95, 0.50, 0.05,
                           help="Transactions scoring above this are flagged.")
 
-    if st.button("↺ Reset feed", use_container_width=True):
+    if st.button("Reset feed", use_container_width=True):
         for k in ("sim", "feed"):
             st.session_state.pop(k, None)
         st.rerun()
 
 # ---------------- header & metrics ----------------
 
+branding.eyebrow("Explainable ML · Fraud & Anomaly Detection")
 st.title("Fraud Detection Studio")
 st.caption(
     "Real-time card-fraud detection with explainable AI — every flag comes with "
@@ -87,7 +88,7 @@ injected = feed[feed["is_fraud"] == 1]
 caught = injected[injected["risk"] >= threshold]
 
 tab_live, tab_how, tab_model = st.tabs(
-    ["🔴  Live feed", "🧠  How it works", "📊  Data & model"]
+    ["Live feed", "How it works", "Data & model"]
 )
 
 # ================= TAB 1: live feed =================
@@ -121,7 +122,8 @@ with tab_live:
     )
     fig.update_layout(margin=dict(l=0, r=0, t=10, b=0),
                       paper_bgcolor="rgba(0,0,0,0)",
-                      plot_bgcolor="rgba(255,255,255,0.03)")
+                      plot_bgcolor="rgba(255,255,255,0.03)",
+                      font={"color": "#e8e8ec"})
     st.plotly_chart(fig, use_container_width=True)
 
     left, right = st.columns([3, 2], gap="large")
@@ -147,7 +149,7 @@ with tab_live:
         )
 
     with right:
-        st.subheader("🔍 Investigate a flag")
+        st.subheader("Investigate a flag")
         if flagged.empty:
             st.info("No transactions above the threshold yet. "
                     "Inject a fraud scenario from the sidebar.")
@@ -163,7 +165,7 @@ with tab_live:
             )
             row = feed.loc[feed["txn_id"] == txn_id].iloc[0]
 
-            truth = "⚠️ injected fraud" if row["is_fraud"] else "legitimate (false positive)"
+            truth = "injected fraud" if row["is_fraud"] else "legitimate — a false positive"
             scenario = SCENARIOS.get(row["scenario"], "")
             st.markdown(
                 f"**{row['merchant']}** · {row['category']} · {row['city']} · "
@@ -175,9 +177,9 @@ with tab_live:
 
             explanation = explain_row(ART["explainer"], row)
 
-            st.markdown("**Why the model flagged it:**")
-            for reason in plain_english(explanation, row):
-                st.markdown(f"- {reason}")
+            st.markdown("**Why the model flagged it**")
+            for r in plain_english(explanation, row):
+                branding.reason(r, "neg")
 
             fig_w, ax = plt.subplots()
             shap.plots.waterfall(explanation, max_display=9, show=False)
@@ -225,8 +227,8 @@ with tab_how:
     plt.close("all")
 
     st.write("")
-    st.subheader("The three attack patterns — and how they're caught")
-    with st.expander("💳 Stolen card spree"):
+    st.subheader("The three attack patterns, and how they're caught")
+    with st.expander("Stolen card spree"):
         st.markdown(
             "A pickpocketed card gets maxed out fast: 6–10 card-present purchases "
             "within ~90 minutes, far from the victim's home city, at high-risk "
@@ -234,14 +236,14 @@ with tab_how:
             "amounts as the fraudster tests limits. **Caught by:** velocity + "
             "geo-distance + merchant risk + amount-vs-baseline all firing at once."
         )
-    with st.expander("🌙 Account takeover"):
+    with st.expander("Account takeover"):
         st.markdown(
             "Stolen credentials are used from the attacker's location: late-night "
             "card-not-present purchases at merchants the customer has never used, "
             "in amounts far above their baseline. **Caught by:** night-time flag + "
             "online flag + first-time merchant + amount ratio."
         )
-    with st.expander("🔬 Card testing"):
+    with st.expander("Card testing"):
         st.markdown(
             "Before selling card numbers, fraudsters validate them with rapid "
             "micro-charges ($0.50–$3) at online merchants — then cash out with "
@@ -258,6 +260,20 @@ with tab_how:
             "features, calibrated alerting, explainable triage — not the headline "
             "number. Knowing why your metric is too good is part of the job."
         )
+
+    st.write("")
+    st.subheader("Mapped to a hiring manager's checklist")
+    st.markdown(
+        """
+| If your job description says… | This project demonstrates it by… |
+|---|---|
+| Detect fraud / financial crime in transaction data | Behavioural feature engineering — velocity, geo-distance, deviation from personal baseline — across three realistic attack patterns |
+| Real-time risk scoring | Streaming transaction scoring with a tunable alert threshold and live recall measurement |
+| Support investigators and alert triage | Every alert carries exact SHAP attributions translated into plain-English reasons, with ground truth and false positives shown honestly |
+| Rigorous model evaluation | Hard negatives engineered into training, PR-AUC alongside ROC-AUC, and a documented explanation of why the synthetic metric overstates reality |
+| Production engineering discipline | Identical feature pipeline for training and live scoring, reproducible simulator, version-controlled and publicly deployed |
+"""
+    )
 
 # ================= TAB 3: data & model =================
 
