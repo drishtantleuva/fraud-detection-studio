@@ -56,7 +56,10 @@ def train_model(seed: int = 42) -> dict:
     }
 
     explainer = shap.TreeExplainer(model)
-    return {"model": model, "explainer": explainer, "metrics": metrics}
+    sample = X_test.sample(min(300, len(X_test)), random_state=seed)
+    global_explanation = explainer(sample.astype(float))
+    return {"model": model, "explainer": explainer, "metrics": metrics,
+            "global_explanation": global_explanation}
 
 
 def score(model: XGBClassifier, df: pd.DataFrame) -> np.ndarray:
