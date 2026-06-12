@@ -2,6 +2,8 @@
 
 **Real-time card-fraud detection with explainable AI — every flag comes with a SHAP breakdown and a plain-English reason.**
 
+**▶ Live demo: https://drishtant-fraud-studio.streamlit.app**
+
 An interactive demo of production fraud-detection techniques: a live synthetic transaction feed is scored by an XGBoost classifier, and every alert can be investigated down to the exact features that drove the decision. Inject classic fraud attacks and watch the model catch them.
 
 ![Fraud Detection Studio](docs/screenshot.png)
