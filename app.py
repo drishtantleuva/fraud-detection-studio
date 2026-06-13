@@ -262,17 +262,16 @@ with tab_how:
         )
 
     st.write("")
-    st.subheader("Mapped to a hiring manager's checklist")
+    st.subheader("Read the code")
     st.markdown(
-        """
-| If your job description says… | This project demonstrates it by… |
-|---|---|
-| Detect fraud / financial crime in transaction data | Behavioural feature engineering — velocity, geo-distance, deviation from personal baseline — across three realistic attack patterns |
-| Real-time risk scoring | Streaming transaction scoring with a tunable alert threshold and live recall measurement |
-| Support investigators and alert triage | Every alert carries exact SHAP attributions translated into plain-English reasons, with ground truth and false positives shown honestly |
-| Rigorous model evaluation | Hard negatives engineered into training, PR-AUC alongside ROC-AUC, and a documented explanation of why the synthetic metric overstates reality |
-| Production engineering discipline | Identical feature pipeline for training and live scoring, reproducible simulator, version-controlled and publicly deployed |
-"""
+        "The whole system is about 690 lines — small enough to review in one "
+        "sitting, and structured the way production code is: simulation, "
+        "modelling and presentation kept strictly apart.\n\n"
+        "| Module | Responsibility | |\n"
+        "|---|---|---|\n"
+        "| [`data_gen.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/data_gen.py) | Synthetic customer book, transaction simulator, the three attack patterns, and the behavioural feature engineering shared by training and live scoring | 282 lines |\n"
+        "| [`model.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/model.py) | Trains the classifier, computes SHAP attributions, and renders them as the plain-English reasons investigators read | 87 lines |\n"
+        "| [`app.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/app.py) | Everything you are looking at | 320 lines |\n"
     )
 
 # ================= TAB 3: data & model =================
