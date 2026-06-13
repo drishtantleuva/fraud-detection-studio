@@ -17,6 +17,12 @@ html, body, [class*="st-"], [data-testid="stMarkdownContainer"] {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* Streamlit renders icons as Material Symbols ligatures; the font override
+   above must never reach them or the icon name shows as literal text. */
+[data-testid="stIconMaterial"], [data-testid="stExpanderToggleIcon"] {
+  font-family: 'Material Symbols Rounded' !important;
+}
+
 h1 {
   font-weight: 800 !important;
   letter-spacing: -0.02em;
