@@ -264,14 +264,13 @@ with tab_how:
     st.write("")
     st.subheader("Read the code")
     st.markdown(
-        "The whole system is about 690 lines — small enough to review in one "
-        "sitting, and structured the way production code is: simulation, "
-        "modelling and presentation kept strictly apart.\n\n"
-        "| Module | Responsibility | |\n"
-        "|---|---|---|\n"
-        "| [`data_gen.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/data_gen.py) | Synthetic customer book, transaction simulator, the three attack patterns, and the behavioural feature engineering shared by training and live scoring | 282 lines |\n"
-        "| [`model.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/model.py) | Trains the classifier, computes SHAP attributions, and renders them as the plain-English reasons investigators read | 87 lines |\n"
-        "| [`app.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/app.py) | Everything you are looking at | 320 lines |\n"
+        "Small, deliberately separated codebase — simulation, modelling and "
+        "presentation never mix. Each module is a short read.\n\n"
+        "| Module | Responsibility |\n"
+        "|---|---|\n"
+        "| [`data_gen.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/data_gen.py) | Synthetic customer book, transaction simulator, the three attack patterns, and the behavioural feature engineering shared by training and live scoring |\n"
+        "| [`model.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/model.py) | Trains the classifier, computes SHAP attributions, and renders them as the plain-English reasons investigators read |\n"
+        "| [`app.py`](https://github.com/drishtantleuva/fraud-detection-studio/blob/main/app.py) | Everything you are looking at |\n"
     )
 
 # ================= TAB 3: data & model =================
