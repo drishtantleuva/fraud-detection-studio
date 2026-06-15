@@ -1,115 +1,126 @@
-"""Shared look-and-feel: typography, card styling, dark chart helpers."""
+"""Visual identity for the Fraud Detection Studio.
 
-import matplotlib.colors as mcolors
-import matplotlib.pyplot as plt
+Design language: a security-operations console. Near-black, dense, technical.
+IBM Plex Mono for labels and metrics, signal-red for alerts and a cool cyan for
+cleared activity — the way a real-time monitoring tool for a fraud team looks,
+not a marketing dashboard.
+"""
+
 import streamlit as st
 
-ACCENT1 = "#7b5cff"
-ACCENT2 = "#2fc8f5"
-PANEL = "#15151a"
-INK = "#e8e8ec"
+BG = "#0a0c10"
+PANEL = "#12161d"
+INK = "#dfe3e8"
+MUTED = "#8b94a3"
+CYAN = "#38bdf8"
+ALERT = "#ff3b46"
+AMBER = "#f5a623"
+LINE = "#232a35"
 
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
 html, body, [class*="st-"], [data-testid="stMarkdownContainer"] {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
 }
-
-/* Streamlit renders icons as Material Symbols ligatures; the font override
-   above must never reach them or the icon name shows as literal text. */
-[data-testid="stIconMaterial"], [data-testid="stExpanderToggleIcon"] {
-  font-family: 'Material Symbols Rounded' !important;
-}
+[data-testid="stAppViewContainer"] { background: #0a0c10; }
 
 h1 {
-  font-weight: 800 !important;
-  letter-spacing: -0.02em;
-  background: linear-gradient(92deg, #f2f2f5 30%, #7b5cff 75%, #2fc8f5);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-weight: 600 !important;
+  font-size: 2.2rem !important;
+  letter-spacing: -0.01em;
+  color: #f1f4f8 !important;
 }
-h2, h3 { font-weight: 700 !important; letter-spacing: -0.01em; }
+h2, h3 {
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-weight: 600 !important;
+  color: #eef2f6 !important;
+}
 
+/* metric cards — instrument readouts: sharp corners, mono values, a top tick */
 [data-testid="stMetric"] {
-  background: #15151a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 14px 18px;
+  background: #12161d;
+  border: 1px solid #232a35;
+  border-top: 2px solid #38bdf8;
+  border-radius: 3px;
+  padding: 14px 16px;
 }
+[data-testid="stMetricLabel"] {
+  color: #8b94a3 !important; text-transform: uppercase;
+  letter-spacing: 0.08em; font-size: 0.72rem !important;
+}
+[data-testid="stMetricValue"] {
+  font-family: 'IBM Plex Mono', monospace !important;
+  color: #f1f4f8 !important; font-weight: 600;
+}
+[data-testid="stMetricDelta"] { color: #38bdf8 !important; }
 
 [data-testid="stSidebar"] {
-  background: #101014;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  background: #0c1015; border-right: 1px solid #1c232e;
+}
+[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+  font-size: 1rem !important; text-transform: uppercase; letter-spacing: 0.1em;
 }
 
 .stButton button {
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px; border: 1px solid #2b3442;
+  background: #12161d; color: #cdd5df;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
 }
-.stButton button:hover { border-color: #7b5cff; color: #fff; }
+.stButton button:hover { border-color: #38bdf8; color: #fff; }
 
-[data-testid="stTabs"] button[role="tab"] { font-weight: 600; font-size: 0.95rem; }
+[data-testid="stTabs"] button[role="tab"] {
+  font-family: 'IBM Plex Mono', monospace; font-weight: 500; color: #8b94a3;
+}
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"] { color: #38bdf8; }
+[data-testid="stIconMaterial"] { font-family: 'Material Symbols Rounded' !important; }
 
 div[data-testid="stExpander"] {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  background: #121217;
+  border: 1px solid #232a35; border-radius: 3px; background: #0f141b;
 }
 
-.dl-footer {
-  margin-top: 8px;
-  color: #8a8a92;
-  font-size: 0.85rem;
+/* console kicker: mono, with a pulsing live dot */
+.eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase; letter-spacing: 0.16em;
+  font-size: 0.72rem; color: #38bdf8; margin-bottom: 2px;
 }
-.dl-footer a { color: #2fc8f5; text-decoration: none; }
+.live-dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: #ff3b46; margin-right: 7px; vertical-align: middle;
+  box-shadow: 0 0 0 0 rgba(255,59,70,0.6); animation: pulse 1.8s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,59,70,0.5); }
+  70% { box-shadow: 0 0 0 7px rgba(255,59,70,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,59,70,0); }
+}
 
 .dl-step {
-  background: #15151a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 18px;
-  height: 100%;
+  background: #12161d; border: 1px solid #232a35; border-radius: 3px;
+  padding: 18px; height: 100%;
 }
-.dl-step b { color: #2fc8f5; }
+.dl-step b { color: #38bdf8; font-family: 'IBM Plex Mono', monospace; }
 .dl-step .n {
-  display: inline-block; width: 26px; height: 26px; line-height: 26px;
-  text-align: center; border-radius: 50%;
-  background: linear-gradient(92deg, #7b5cff, #2fc8f5);
-  color: white; font-weight: 700; margin-bottom: 8px; font-size: 0.85rem;
+  display: inline-block; font-family: 'IBM Plex Mono', monospace;
+  color: #8b94a3; font-weight: 600; margin-bottom: 8px; font-size: 0.85rem;
+  border: 1px solid #2b3442; border-radius: 3px; padding: 1px 7px;
 }
 
+/* alerts — flagged reasons read like log lines */
 .reason {
-  padding: 9px 14px; margin: 7px 0;
-  border-left: 3px solid; border-radius: 0 10px 10px 0;
-  background: rgba(255, 255, 255, 0.03);
-  font-size: 0.95rem; color: #dcdce2;
+  padding: 9px 14px; margin: 6px 0;
+  border-left: 3px solid #ff3b46; border-radius: 0 3px 3px 0;
+  background: rgba(255,59,70,0.06);
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.86rem; color: #e6cdd0;
 }
-.reason.neg { border-color: #ff5c5c; }
-.reason.pos { border-color: #21c98d; }
-.reason.tip { border-color: #2fc8f5; }
+.reason.pos { border-left-color: #38bdf8; background: rgba(56,189,248,0.06); color: #cfe3ef; }
+.reason.tip { border-left-color: #f5a623; background: rgba(245,166,35,0.06); color: #ecdcc3; }
 
-.pill {
-  display: inline-block; padding: 8px 24px; border-radius: 999px;
-  font-weight: 800; letter-spacing: 0.05em; font-size: 1.2rem;
-}
-.pill.ok {
-  background: rgba(33, 201, 141, 0.14); color: #21c98d;
-  border: 1px solid rgba(33, 201, 141, 0.4);
-}
-.pill.no {
-  background: rgba(255, 92, 92, 0.12); color: #ff5c5c;
-  border: 1px solid rgba(255, 92, 92, 0.4);
-}
-
-.eyebrow {
-  text-transform: uppercase; letter-spacing: 0.22em;
-  font-size: 0.72rem; color: #8a8a92; margin-bottom: -4px;
-}
-
-table { font-size: 0.92rem; }
+table { font-size: 0.9rem; }
+a { color: #38bdf8; }
 </style>
 """
 
@@ -119,40 +130,34 @@ def inject():
 
 
 def eyebrow(text: str):
-    st.markdown(f'<p class="eyebrow">{text}</p>', unsafe_allow_html=True)
+    st.markdown(
+        f'<p class="eyebrow"><span class="live-dot"></span>{text}</p>',
+        unsafe_allow_html=True,
+    )
 
 
-def verdict_pill(approved: bool, label_ok: str = "Approved",
-                 label_no: str = "Declined"):
-    cls, label = ("ok", label_ok) if approved else ("no", label_no)
-    st.markdown(f'<span class="pill {cls}">{label}</span>', unsafe_allow_html=True)
-
-
-def reason(text: str, kind: str):
-    """kind: 'neg' (against), 'pos' (in favour), 'tip' (guidance)."""
+def reason(text: str, kind: str = "neg"):
     st.markdown(f'<div class="reason {kind}">{text}</div>', unsafe_allow_html=True)
 
 
 def darken(fig):
-    """Restyle a matplotlib figure (e.g. SHAP plots) for the dark theme.
+    """Restyle a matplotlib/SHAP figure for the console's near-black panels."""
+    import matplotlib.colors as mcolors
+    import matplotlib.pyplot as plt
 
-    Any text darker than mid-grey is lifted to the ink colour so axis labels,
-    tick labels and SHAP annotations stay readable on the dark panel.
-    """
     fig.patch.set_facecolor(PANEL)
     for ax in fig.axes:
         ax.set_facecolor(PANEL)
         ax.tick_params(colors=INK, labelcolor=INK)
         for spine in ax.spines.values():
-            spine.set_color("#3a3a42")
+            spine.set_color(LINE)
         ax.xaxis.label.set_color(INK)
         ax.yaxis.label.set_color(INK)
         ax.title.set_color(INK)
     for text in fig.findobj(plt.Text):
         try:
             r, g, b = mcolors.to_rgb(text.get_color())
-            luminance = 0.299 * r + 0.587 * g + 0.114 * b
-            if luminance < 0.82:
+            if 0.299 * r + 0.587 * g + 0.114 * b < 0.82:
                 text.set_color(INK)
         except (ValueError, TypeError):
             pass
@@ -161,8 +166,8 @@ def darken(fig):
 
 def step(n, title, body):
     st.markdown(
-        f'<div class="dl-step"><span class="n">{n}</span><br/>'
-        f'<b>{title}</b><br/><span style="color:#b9b9c2;font-size:0.92rem">{body}</span></div>',
+        f'<div class="dl-step"><span class="n">{n:02d}</span><br/><br/>'
+        f'<b>{title}</b><br/><span style="color:#aab2bf;font-size:0.9rem">{body}</span></div>',
         unsafe_allow_html=True,
     )
 
@@ -170,11 +175,11 @@ def step(n, title, body):
 def footer(repo: str):
     st.divider()
     st.markdown(
-        f'<p class="dl-footer">Built by <a href="https://drishtantleuva.github.io" '
-        f'target="_blank"><b>Drishtant Leuva</b></a> — Data Scientist · Risk &amp; '
-        f'Explainable AI &nbsp;·&nbsp; '
-        f'<a href="https://github.com/drishtantleuva/{repo}" target="_blank">Source on GitHub</a> '
+        f'<p style="color:#6c7585;font-size:0.82rem;font-family:\'IBM Plex Mono\',monospace">'
+        f'built by <a href="https://drishtantleuva.github.io" target="_blank">'
+        f'<b>Drishtant Leuva</b></a> — data scientist · risk &amp; anomaly detection &nbsp;·&nbsp; '
+        f'<a href="https://github.com/drishtantleuva/{repo}" target="_blank">source</a> '
         f'&nbsp;·&nbsp; <a href="https://www.linkedin.com/in/drishtant-leuva/" '
-        f'target="_blank">LinkedIn</a></p>',
+        f'target="_blank">linkedin</a></p>',
         unsafe_allow_html=True,
     )
