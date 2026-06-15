@@ -114,7 +114,7 @@ with tab_live:
         color="risk",
         symbol="status",
         symbol_map={"Flagged": "x", "Cleared": "circle"},
-        color_continuous_scale=["#2fc8f5", "#7b5cff", "#ff5c87"],
+        color_continuous_scale=["#38bdf8", "#f5a623", "#ff3b46"],
         hover_data=["txn_id", "customer_id", "merchant", "category", "city"],
         log_y=True,
         height=380,
@@ -122,8 +122,8 @@ with tab_live:
     )
     fig.update_layout(margin=dict(l=0, r=0, t=10, b=0),
                       paper_bgcolor="rgba(0,0,0,0)",
-                      plot_bgcolor="rgba(255,255,255,0.03)",
-                      font={"color": "#e8e8ec"})
+                      plot_bgcolor="rgba(56,189,248,0.03)",
+                      font={"color": "#dfe3e8", "family": "IBM Plex Mono"})
     st.plotly_chart(fig, use_container_width=True)
 
     left, right = st.columns([3, 2], gap="large")
