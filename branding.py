@@ -12,14 +12,14 @@ BG = "#0a0c10"
 PANEL = "#12161d"
 INK = "#dfe3e8"
 MUTED = "#8b94a3"
-CYAN = "#38bdf8"
+CYAN = "#1e6f52"
 ALERT = "#ff3b46"
-AMBER = "#f5a623"
+AMBER = "#e8a33d"
 LINE = "#232a35"
 
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap');
 
 html, body, [class*="st-"], [data-testid="stMarkdownContainer"] {
   font-family: 'IBM Plex Sans', -apple-system, sans-serif;
@@ -43,7 +43,7 @@ h2, h3 {
 [data-testid="stMetric"] {
   background: #12161d;
   border: 1px solid #232a35;
-  border-top: 2px solid #38bdf8;
+  border-top: 2px solid #1e6f52;
   border-radius: 3px;
   padding: 14px 16px;
 }
@@ -55,7 +55,7 @@ h2, h3 {
   font-family: 'IBM Plex Mono', monospace !important;
   color: #f1f4f8 !important; font-weight: 600;
 }
-[data-testid="stMetricDelta"] { color: #38bdf8 !important; }
+[data-testid="stMetricDelta"] { color: #1e6f52 !important; }
 
 [data-testid="stSidebar"] {
   background: #0c1015; border-right: 1px solid #1c232e;
@@ -69,12 +69,12 @@ h2, h3 {
   background: #12161d; color: #cdd5df;
   font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
 }
-.stButton button:hover { border-color: #38bdf8; color: #fff; }
+.stButton button:hover { border-color: #1e6f52; color: #fff; }
 
 [data-testid="stTabs"] button[role="tab"] {
   font-family: 'IBM Plex Mono', monospace; font-weight: 500; color: #8b94a3;
 }
-[data-testid="stTabs"] button[role="tab"][aria-selected="true"] { color: #38bdf8; }
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"] { color: #1e6f52; }
 [data-testid="stIconMaterial"] { font-family: 'Material Symbols Rounded' !important; }
 
 div[data-testid="stExpander"] {
@@ -85,7 +85,7 @@ div[data-testid="stExpander"] {
 .eyebrow {
   font-family: 'IBM Plex Mono', monospace;
   text-transform: uppercase; letter-spacing: 0.16em;
-  font-size: 0.72rem; color: #38bdf8; margin-bottom: 2px;
+  font-size: 0.72rem; color: #e8a33d; margin-bottom: 2px;
 }
 .live-dot {
   display: inline-block; width: 7px; height: 7px; border-radius: 50%;
@@ -102,7 +102,7 @@ div[data-testid="stExpander"] {
   background: #12161d; border: 1px solid #232a35; border-radius: 3px;
   padding: 18px; height: 100%;
 }
-.dl-step b { color: #38bdf8; font-family: 'IBM Plex Mono', monospace; }
+.dl-step b { color: #1e6f52; font-family: 'IBM Plex Mono', monospace; }
 .dl-step .n {
   display: inline-block; font-family: 'IBM Plex Mono', monospace;
   color: #8b94a3; font-weight: 600; margin-bottom: 8px; font-size: 0.85rem;
@@ -116,11 +116,11 @@ div[data-testid="stExpander"] {
   background: rgba(255,59,70,0.06);
   font-family: 'IBM Plex Mono', monospace; font-size: 0.86rem; color: #e6cdd0;
 }
-.reason.pos { border-left-color: #38bdf8; background: rgba(56,189,248,0.06); color: #cfe3ef; }
-.reason.tip { border-left-color: #f5a623; background: rgba(245,166,35,0.06); color: #ecdcc3; }
+.reason.pos { border-left-color: #1e6f52; background: rgba(30,111,82,0.10); color: #cfe3df; }
+.reason.tip { border-left-color: #e8a33d; background: rgba(245,166,35,0.06); color: #ecdcc3; }
 
 table { font-size: 0.9rem; }
-a { color: #38bdf8; }
+a { color: #e8a33d; }
 </style>
 """
 
@@ -177,7 +177,7 @@ def footer(repo: str):
     st.markdown(
         f'<p style="color:#6c7585;font-size:0.82rem;font-family:\'IBM Plex Mono\',monospace">'
         f'built by <a href="https://drishtantleuva.github.io" target="_blank">'
-        f'<b>Drishtant Leuva</b></a> — data scientist · risk &amp; anomaly detection &nbsp;·&nbsp; '
+        f'<b style="font-family:\'Fraunces\',Georgia,serif">Drishtant Leuva</b></a> — data scientist · risk &amp; anomaly detection &nbsp;·&nbsp; '
         f'<a href="https://github.com/drishtantleuva/{repo}" target="_blank">source</a> '
         f'&nbsp;·&nbsp; <a href="https://www.linkedin.com/in/drishtant-leuva/" '
         f'target="_blank">linkedin</a></p>',

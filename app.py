@@ -114,7 +114,7 @@ with tab_live:
         color="risk",
         symbol="status",
         symbol_map={"Flagged": "x", "Cleared": "circle"},
-        color_continuous_scale=["#38bdf8", "#f5a623", "#ff3b46"],
+        color_continuous_scale=["#1e6f52", "#e8a33d", "#ff3b46"],
         hover_data=["txn_id", "customer_id", "merchant", "category", "city"],
         log_y=True,
         height=380,
